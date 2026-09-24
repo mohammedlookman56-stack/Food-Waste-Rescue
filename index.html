@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Food Waste Rescue — a colorful serious browser game about rescuing edible food.">
+<title>Food Waste Rescue — The Recovery Shift</title>
+<style>
+:root{--bg:#07131d;--panel:#102638;--line:#31576d;--text:#f7fff9;--muted:#a8c7d2;--green:#58f29b;--cyan:#55dcff;--gold:#ffd45c;--red:#ff6877;--purple:#9b7cff}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,sans-serif;color:var(--text);background:radial-gradient(circle at 15% 0,#4c2b7955,transparent 25%),radial-gradient(circle at 90% 8%,#008f9d44,transparent 25%),linear-gradient(#06111a,#0b1925);overflow-x:hidden}
+button{font:inherit}.app{max-width:1320px;margin:auto;padding:16px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px}.brandline{display:flex;gap:12px;align-items:center}.logo{width:50px;height:50px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,#ffcf4a,#ff735b 45%,#9b6cff);font-size:27px;box-shadow:0 10px 30px #ff985744}.brand{font-size:25px;font-weight:950;letter-spacing:-1px}.tag{font-size:11px;color:#91c4d2}.stats{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.stat{min-width:82px;text-align:center;padding:8px 11px;border:1px solid var(--line);border-radius:12px;background:#102333dd}.stat b{display:block;font-size:18px}.stat span{font-size:9px;text-transform:uppercase;color:var(--muted);letter-spacing:.7px}.layout{display:grid;grid-template-columns:minmax(0,1.7fr) 310px;gap:14px;margin-top:14px}.game,.side{border:1px solid #2c5067;border-radius:20px;background:linear-gradient(180deg,#102637,#0b1b27);box-shadow:0 20px 60px #0008}.game{padding:12px}.side{padding:14px}.gamehead{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}.game h2,.side h2{margin:0;font-size:15px}.mission{font-size:10px;color:var(--muted);margin-top:3px}.badge{padding:7px 9px;border-radius:99px;background:linear-gradient(90deg,#503d8c,#1d8190);font-size:9px;font-weight:900;border:1px solid #7185d4}
+#board{position:relative;height:610px;overflow:hidden;border:4px solid #35536a;border-radius:17px;background:#85caeb;box-shadow:inset 0 0 0 2px #fff3,0 15px 40px #0008;isolation:isolate}
+#world{position:absolute;inset:0;transition:filter .2s}.sky{position:absolute;inset:0;background:linear-gradient(#58c9f1 0,#c4f0ff 47%,#ffe6a3 47%,#ffe6a3 100%)}.sun{position:absolute;right:7%;top:7%;width:86px;height:86px;border-radius:50%;background:#ffe26c;box-shadow:0 0 65px #ffe26c99}.cloud{position:absolute;font-size:60px;opacity:.7;animation:cloud 22s linear infinite}.c1{top:8%;left:8%}.c2{top:17%;left:58%;animation-duration:29s}@keyframes cloud{50%{transform:translateX(100px)}100%{transform:translateX(0)}}
+.horizon{position:absolute;left:0;right:0;top:27%;height:31%;background:linear-gradient(170deg,#5e9e69,#88ca72);clip-path:polygon(0 55%,8% 31%,18% 56%,29% 12%,41% 52%,52% 26%,65% 55%,77% 14%,90% 51%,100% 28%,100% 100%,0 100%)}.field{position:absolute;left:0;right:0;top:47%;bottom:0;background:repeating-linear-gradient(90deg,#98d96f 0 42px,#84c65e 42px 84px);transform:perspective(620px) rotateX(17deg);transform-origin:top}.field:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 25%,#ffd45a 0 4px,transparent 5px),radial-gradient(circle at 50% 58%,#ff70a5 0 4px,transparent 5px),radial-gradient(circle at 78% 32%,#8d78ff 0 4px,transparent 5px);background-size:90px 90px}
+.market{position:absolute;z-index:2;background:#f8dfa0;border:4px solid #765044;border-radius:10px;padding:8px 10px;color:#57362f;font-size:23px;text-align:center;box-shadow:0 8px #5d413833}.market:before{content:"";position:absolute;left:-7px;right:-7px;top:-18px;height:23px;background:repeating-linear-gradient(135deg,#ff6868 0 16px,#fff 16px 32px);border:3px solid #765044;border-radius:8px 8px 0 0}.market span{display:block;font-size:7px;font-weight:900;letter-spacing:1px}.m1{left:4%;top:35%}.m2{left:29%;top:34%}.m3{right:4%;top:35%}.tree{position:absolute;bottom:16%;font-size:76px;z-index:2;filter:drop-shadow(0 6px 2px #0003)}.t1{left:2%}.t2{right:21%}.pond{position:absolute;right:4%;bottom:8%;width:180px;height:65px;border-radius:50%;background:repeating-linear-gradient(165deg,#4ed8e9 0 8px,#3dbfd5 9px 15px);border:5px solid #258da8;z-index:2}.bridge{position:absolute;right:9%;bottom:10%;font-size:64px;z-index:3}.butterfly{position:absolute;z-index:5;font-size:25px;animation:fly 5s ease-in-out infinite}.b1{left:48%;top:29%}.b2{right:30%;top:23%;animation-delay:1.5s}@keyframes fly{50%{transform:translate(28px,-20px) rotate(12deg)}}
+.weather{position:absolute;z-index:8;top:10px;left:50%;transform:translateX(-50%);background:#102536c9;border:1px solid #ffffff30;border-radius:99px;padding:6px 11px;font-size:9px;white-space:nowrap;backdrop-filter:blur(6px)}.hud{position:absolute;z-index:8;top:10px;left:11px;right:11px;display:flex;justify-content:space-between;pointer-events:none}.pill{background:#0c1d2acc;border:1px solid #ffffff24;padding:7px 10px;border-radius:10px;font-size:10px;box-shadow:0 5px 15px #0004}.pill strong{color:var(--gold)}.combo{position:absolute;z-index:10;top:48px;left:50%;transform:translateX(-50%);font-size:21px;font-weight:950;color:var(--gold);opacity:0;transition:.15s;text-shadow:0 0 20px #ffd45c}.combo.show{opacity:1}
+.item{position:absolute;z-index:7;width:69px;height:69px;border-radius:19px;display:grid;place-items:center;font-size:37px;background:linear-gradient(145deg,#fff,#fff0d5);border:4px solid #3c5262;box-shadow:0 10px 17px #0006,0 0 0 2px #ffffff66;cursor:pointer;user-select:none;animation:bob 1.5s ease-in-out infinite;transition:.12s}.item:hover{transform:scale(1.16) rotate(-4deg)}.item.good{outline:3px solid #4cf09a}.item.bad{outline:3px solid #ff6576}@keyframes bob{50%{transform:translateY(-5px)}}#truck{position:absolute;z-index:9;bottom:12px;left:18px;font-size:58px;filter:drop-shadow(0 8px 3px #0006);transition:left .25s}.floattext{position:absolute;z-index:15;font-weight:950;font-size:17px;text-shadow:0 3px 3px #000;pointer-events:none;animation:rise .85s forwards}@keyframes rise{to{transform:translateY(-50px);opacity:0}}
+.controls{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.controls button,.side button{border:2px solid #315b73;border-radius:10px;padding:8px 11px;background:linear-gradient(#1b3d54,#132b3d);color:#fff;font-weight:850;cursor:pointer;box-shadow:0 4px #07131b;transition:.12s}.controls button:hover,.side button:hover{transform:translateY(-2px)}.primary{background:linear-gradient(135deg,#5df39b,#4bd9e9)!important;color:#062015!important;border:0!important}.side section{padding:12px 0;border-bottom:1px solid #24465a}.side section:last-child{border:0}.goal{display:flex;justify-content:space-between;font-size:11px;margin:6px 0}.bar{height:9px;background:#173140;border-radius:99px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#57ef9b,#55dcff,#9b7cff);transition:.25s}.legend{display:grid;gap:6px;color:var(--muted);font-size:10px}.legend span{display:flex;gap:7px}.dot{width:12px;height:12px;background:var(--green);border-radius:4px}.dot.bad{background:var(--red)}.missioncard{background:#0d202e;border:1px solid #294b61;border-radius:10px;padding:9px;font-size:10px;line-height:1.6}.achievements{display:grid;grid-template-columns:1fr 1fr;gap:6px}.achievement{padding:8px;border-radius:8px;background:#0c1d2a;border:1px solid #29495c;font-size:9px;color:#6f9aaa}.achievement.on{color:#fff;border-color:#51dc9a;background:#123a37}.log{font-size:10px;color:#9cc0cc;max-height:105px;overflow:auto;line-height:1.5}.tip{background:#162c3d;border-left:3px solid var(--gold);padding:8px;font-size:10px;color:#dceef3;border-radius:6px}.overlay{position:absolute;z-index:30;inset:0;background:#07131de8;display:none;place-items:center;padding:25px;text-align:center;backdrop-filter:blur(5px)}.overlay.show{display:grid}.card{max-width:510px;padding:26px;border-radius:20px;background:linear-gradient(145deg,#1a3850,#142536);border:2px solid #4b8db0;box-shadow:0 25px 70px #000b}.card h1{margin:0 0 9px}.card p{font-size:12px;color:#b8d4df;line-height:1.6}.scorebig{font-size:48px;font-weight:950;color:var(--green);text-shadow:0 0 25px #57ef9b55}.resultgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:15px 0}.resultgrid div{padding:8px;border-radius:9px;background:#0d202d}.resultgrid b{display:block;font-size:18px}.resultgrid span{font-size:8px;color:#86aebd;text-transform:uppercase}.shop{display:grid;grid-template-columns:1fr 1fr;gap:6px}.shop button{font-size:9px}.locked{opacity:.45}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.stats{justify-content:flex-start}#board{height:530px}}
+</style>
+
+<style>
+#audioPanel{display:flex;align-items:center;gap:7px;margin-top:7px;font-size:9px;color:#9fc3cf}
+#audioPanel button{padding:6px 9px!important;font-size:10px!important}
+#soundStatus{opacity:.8}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><div class="brandline"><div class="logo">🥬</div><div><div class="brand">FOOD WASTE RESCUE</div><div class="tag">THE RECOVERY SHIFT • serious browser game</div></div></div>
+<div class="stats"><div class="stat"><b id="score">0</b><span>Impact</span></div><div class="stat"><b id="saved">0</b><span>Rescued</span></div><div class="stat"><b id="streak">0</b><span>Combo</span></div><div class="stat"><b id="time">75</b><span>Seconds</span></div></div></header>
+<div class="layout"><main class="game">
+<div class="gamehead"><div><h2>Recovery District • Morning Market</h2><div class="mission">Rescue edible surplus, protect the cold chain and keep community supply moving.</div></div><div class="badge" id="levelBadge">DAY 1 • NORMAL</div></div>
+<div id="board"><div id="world"><div class="sky"></div><div class="sun"></div><div class="cloud c1">☁️</div><div class="cloud c2">☁️</div><div class="horizon"></div><div class="field"></div><div class="market m1">🏪<span>FRESH HUB</span></div><div class="market m2">🥕<span>LOCAL FARM</span></div><div class="market m3">🧺<span>COMMUNITY KITCHEN</span></div><div class="tree t1">🌳</div><div class="tree t2">🌳</div><div class="pond"></div><div class="bridge">🌉</div><div class="butterfly b1">🦋</div><div class="butterfly b2">🦋</div></div>
+<div class="weather">☀️ 28°C • Morning market • Demand: HIGH</div><div class="hud"><div class="pill">🎯 Quota <strong>18</strong></div><div class="pill">🌍 CO₂ <strong id="co2">0.0 kg</strong></div></div><div class="combo" id="combo">COMBO ×1</div><div id="truck">🚚</div>
+<div class="overlay" id="overlay"><div class="card"><div class="scorebig" id="finalScore">0</div><h1 id="endTitle">Shift complete</h1><div class="resultgrid"><div><b id="rSaved">0</b><span>rescued</span></div><div><b id="rCo2">0.0</b><span>kg CO₂</span></div><div><b id="rAccuracy">0%</b><span>accuracy</span></div></div><p id="endText"></p><button class="primary" onclick="startGame()">Start next shift</button></div></div></div>
+
+<div id="audioPanel">
+  <button onclick="toggleSound()">🔊 Sound: ON</button>
+  <span id="soundStatus">Arcade ambience • rescue chimes • alerts</span>
+</div>
+<div class="controls"><button class="primary" onclick="startGame()">▶ Start / Restart</button><button onclick="usePower('freeze')">❄️ Freeze <small id="freezeCount">2</small></button><button onclick="usePower('scan')">🔎 Scanner <small id="scanCount">2</small></button><button onclick="usePower('sort')">📦 Smart Sort <small id="sortCount">1</small></button><button onclick="togglePause()">⏸ Pause</button></div>
+</main>
+<aside class="side">
+<section><h2>Recovery dashboard</h2><div class="goal"><span>Rescue quota</span><b><span id="goalSaved">0</span>/18</b></div><div class="bar"><div class="fill" id="goalBar"></div></div><div class="goal"><span>Combo multiplier</span><b>×<span id="mult">1</span></b></div><div class="goal"><span>Reputation</span><b id="rep">50</b></div></section>
+<section><h2>Shift objectives</h2><div class="missioncard">⭐ Rescue 18 edible items<br>⭐ Maintain 70%+ decision accuracy<br>⭐ Reach 5× combo<br>⭐ Avoid contamination incidents</div></section>
+<section><h2>Tools</h2><div class="legend"><span><i class="dot"></i> Edible / recoverable</span><span><i class="dot bad"></i> Unsafe / reject</span><span>❄️ Freeze slows incoming supply</span><span>🔎 Scanner identifies stock</span><span>📦 Sort removes obvious waste</span></div></section>
+<section><h2>Unlocks</h2><div class="shop"><button id="u1" onclick="buyUpgrade('capacity')">🚚 Bigger route<br>Cost 80</button><button id="u2" onclick="buyUpgrade('combo')">🔥 Combo boost<br>Cost 120</button><button id="u3" onclick="buyUpgrade('time')">⏱ Extra shift<br>Cost 150</button><button id="u4" onclick="buyUpgrade('eco')">🌱 Eco routing<br>Cost 180</button></div></section>
+<section><h2>Achievements</h2><div class="achievements"><div id="a1" class="achievement">🌱 First rescue</div><div id="a2" class="achievement">🔥 5× combo</div><div id="a3" class="achievement">🌍 10 kg CO₂</div><div id="a4" class="achievement">🎯 Quota</div></div></section>
+<section><h2>Decision feed</h2><div class="log" id="log">Start your shift. The market is waiting.</div></section>
+<section><div class="tip"><b>Serious-game lesson:</b> rescue is the last-mile response. Preventing overproduction, improving storage and redistributing surplus earlier can stop waste upstream.</div></section>
+</aside></div></div>
+<script>
+
+// --- Procedural sound design: all effects are generated locally with Web Audio ---
+let audioCtx=null, masterGain=null, soundOn=true, ambienceTimer=null;
+function initAudio(){
+  if(audioCtx)return;
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  masterGain=audioCtx.createGain(); masterGain.gain.value=.13; masterGain.connect(audioCtx.destination);
+}
+function tone(freq,dur=.1,type="sine",vol=.12,delay=0){
+  if(!soundOn)return;
+  initAudio(); if(audioCtx.state==="suspended")audioCtx.resume();
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type=type;o.frequency.setValueAtTime(freq,audioCtx.currentTime+delay);
+  g.gain.setValueAtTime(.0001,audioCtx.currentTime+delay);
+  g.gain.exponentialRampToValueAtTime(vol,audioCtx.currentTime+delay+.012);
+  g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+delay+dur);
+  o.connect(g);g.connect(masterGain);o.start(audioCtx.currentTime+delay);o.stop(audioCtx.currentTime+delay+dur+.03);
+}
+function noise(dur=.12,vol=.06){
+  if(!soundOn)return;
+  initAudio();const n=audioCtx.createBufferSource(),b=audioCtx.createBuffer(1,audioCtx.sampleRate*dur,audioCtx.sampleRate),data=b.getChannelData(0);
+  for(let i=0;i<data.length;i++)data[i]=Math.random()*2-1;
+  const f=audioCtx.createBiquadFilter();f.type="bandpass";f.frequency.value=900;
+  const g=audioCtx.createGain();g.gain.value=vol;b.getChannelData(0).set(data);n.buffer=b;n.connect(f);f.connect(g);g.connect(masterGain);n.start();n.stop(audioCtx.currentTime+dur);
+}
+function sfx(name){
+  if(!soundOn)return;
+  if(name==="start"){tone(330,.09,"square",.07);tone(494,.1,"square",.08,.08);tone(659,.16,"square",.09,.18)}
+  if(name==="rescue"){tone(523,.08,"sine",.08);tone(784,.12,"sine",.09,.07);tone(1046,.16,"sine",.08,.14)}
+  if(name==="bad"){tone(180,.16,"sawtooth",.07);tone(120,.2,"sawtooth",.06,.1);noise(.1,.025)}
+  if(name==="combo"){tone(660,.08,"triangle",.07);tone(880,.08,"triangle",.08,.07);tone(1320,.15,"triangle",.09,.14)}
+  if(name==="power"){tone(220,.08,"square",.06);tone(330,.08,"square",.07,.08);tone(660,.2,"square",.08,.16)}
+  if(name==="upgrade"){tone(392,.09,"triangle",.07);tone(523,.09,"triangle",.08,.09);tone(784,.18,"triangle",.1,.18)}
+  if(name==="level"){tone(262,.1,"square",.06);tone(392,.1,"square",.07,.1);tone(523,.18,"square",.08,.2)}
+  if(name==="win"){[523,659,784,1046].forEach((f,i)=>tone(f,.16,"sine",.09,i*.11))}
+  if(name==="lose"){tone(330,.2,"sawtooth",.07);tone(220,.3,"sawtooth",.06,.18)}
+  if(name==="click"){tone(520,.05,"square",.035)}
+}
+function startAmbience(){
+  if(!soundOn||ambienceTimer)return;
+  ambienceTimer=setInterval(()=>{if(running&&!paused){tone(98,.05,"sine",.018);tone(147,.04,"sine",.012,.09)}},1800);
+}
+function stopAmbience(){clearInterval(ambienceTimer);ambienceTimer=null}
+function toggleSound(){
+  soundOn=!soundOn;
+  const b=document.querySelector("#audioPanel button");
+  b.textContent=soundOn?"🔊 Sound: ON":"🔇 Sound: OFF";
+  $("soundStatus").textContent=soundOn?"Arcade ambience • rescue chimes • alerts":"Sound muted";
+  if(soundOn){initAudio();sfx("click");startAmbience()}else stopAmbience();
+}
+document.addEventListener("pointerdown",()=>{if(soundOn){initAudio();startAmbience()}},{once:true});
+
+const $=id=>document.getElementById(id),board=$("board");
+const foods=[["🍎","Apples",1,.8],["🍌","Bananas",1,.7],["🥕","Carrots",1,.5],["🥬","Greens",1,.6],["🍞","Bread",1,.4],["🥛","Milk",1,.9],["🍊","Oranges",1,.8],["🥔","Potatoes",1,.5],["🍅","Tomatoes",1,.7],["🧀","Cheese",1,1.2],["🥚","Eggs",1,.9],["🍄","Moldy food",0,0],["🗑️","General waste",0,0],["☠️","Contaminated food",0,0],["🤢","Spoiled food",0,0],["🧪","Chemical spill",0,0]];
+let score=0,saved=0,attempts=0,streak=0,time=75,co2=0,mult=1,rep=50,level=1,running=false,paused=false,spawnRate=760,freeze=2,scan=2,sortPower=1,timer,spawnTimer;
+let upgrade={capacity:0,combo:0,time:0,eco:0};
+
+function startGame(){
+ sfx("start");
+ clearInterval(timer);clearInterval(spawnTimer);document.querySelectorAll(".item").forEach(e=>e.remove());
+ score=0;saved=0;attempts=0;streak=0;time=75+upgrade.time*8;co2=0;mult=1;rep=50;level=1;spawnRate=760-Math.min(160,upgrade.capacity*35);freeze=2;scan=2;sortPower=1;running=true;paused=false;
+ $("overlay").classList.remove("show");$("world").style.filter="";$("log").innerHTML="🚦 Shift started. Incoming supply is being inspected.";
+ update();startAmbience();for(let i=0;i<7+upgrade.capacity;i++)spawn();spawnTimer=setInterval(spawn,spawnRate);
+ timer=setInterval(()=>{if(!running||paused)return;time--;if(time===56||time===38||time===20){level++;sfx("level");spawnRate=Math.max(330,spawnRate-110);clearInterval(spawnTimer);spawnTimer=setInterval(spawn,spawnRate);logEvent("⚠️ Supply surge — district level "+level+".")}update();if(time<=0)endGame()},1000);
+}
+function spawn(){
+ if(!running||paused)return;
+ const f=foods[Math.floor(Math.random()*foods.length)],el=document.createElement("div");el.className="item "+(f[2]?"good":"bad");el.textContent=f[0];el.title=f[1];
+ el.style.left=(12+Math.random()*Math.max(20,board.clientWidth-95))+"px";el.style.top=(80+Math.random()*Math.max(20,board.clientHeight-175))+"px";
+ el.onclick=()=>collect(el,f);board.appendChild(el);
+ setTimeout(()=>{if(el.isConnected){el.remove();if(running&&!paused){streak=0;mult=1;rep=Math.max(0,rep-1);update()}}},5000-Math.min(1800,level*280));
+}
+function collect(el,f){
+ if(!running||paused)return;attempts++;const rect=el.getBoundingClientRect(),br=board.getBoundingClientRect();el.remove();
+ if(f[2]){
+  saved++;streak++;mult=Math.min(5+upgrade.combo,1+Math.floor(streak/3));let pts=Math.round((12+Math.min(streak,9)*2)*mult);score+=pts;co2+=f[3]*(upgrade.eco?1.15:1);rep=Math.min(100,rep+2);$("truck").style.left=Math.min(board.clientWidth-80,18+saved*(upgrade.capacity?18:15))+"px";floatText("+"+pts+"  "+f[1],rect.left-br.left,rect.top-br.top);logEvent("✓ "+f[1]+" rescued • +"+pts+" impact"); sfx(streak>=3?"combo":"rescue");
+ }else{streak=0;mult=1;score=Math.max(0,score-18);rep=Math.max(0,rep-7);floatText("−18  UNSAFE",rect.left-br.left,rect.top-br.top);logEvent("✕ "+f[1]+" rejected • contamination risk"); sfx("bad");}
+ update();if(saved>=18)endGame(true);
+}
+function usePower(type){
+ if(!running||paused)return;
+ if(type==="freeze"&&freeze){freeze--; sfx("power");clearInterval(spawnTimer);logEvent("❄️ Cold-chain pause: arrivals suspended for 6 seconds.");setTimeout(()=>{if(running&&!paused)spawnTimer=setInterval(spawn,spawnRate)},6000)}
+ else if(type==="scan"&&scan){scan--; sfx("power");document.querySelectorAll(".item").forEach(e=>e.style.boxShadow=e.classList.contains("good")?"0 0 0 6px #57ef9b,0 0 25px #57ef9b99":"0 0 0 6px #ff6877,0 0 25px #ff687799");logEvent("🔎 Scanner active: safe and unsafe stock revealed.");setTimeout(()=>document.querySelectorAll(".item").forEach(e=>e.style.boxShadow=""),3500)}
+ else if(type==="sort"&&sortPower){sortPower--; sfx("power");let n=0;document.querySelectorAll(".item.bad").forEach(e=>{e.remove();n++});score+=n*8;logEvent("📦 Smart Sort removed "+n+" obvious waste items • +"+n*8);}
+ update();
+}
+function buyUpgrade(type){
+ const costs={capacity:80,combo:120,time:150,eco:180},cost=costs[type];
+ if(score<cost||upgrade[type]>=1)return;
+ score-=cost;upgrade[type]=1;sfx("upgrade");logEvent("🛠️ Upgrade installed: "+type);update();
+}
+function togglePause(){if(!running)return;paused=!paused;$("world").style.filter=paused?"brightness(.55) saturate(.65)":"";logEvent(paused?"⏸ Shift paused.":"▶ Shift resumed.")}
+function floatText(t,x,y){const e=document.createElement("div");e.className="floattext";e.textContent=t;e.style.left=x+"px";e.style.top=y+"px";board.appendChild(e);setTimeout(()=>e.remove(),850)}
+function logEvent(t){$("log").innerHTML="<div>"+t+"</div>"+$("log").innerHTML}
+function update(){
+ $("score").textContent=score;$("saved").textContent=saved;$("streak").textContent=streak;$("time").textContent=time;$("goalSaved").textContent=saved;$("goalBar").style.width=Math.min(100,saved/18*100)+"%";$("co2").textContent=co2.toFixed(1)+" kg";$("mult").textContent=mult;$("rep").textContent=rep;
+ $("freezeCount").textContent=freeze;$("scanCount").textContent=scan;$("sortCount").textContent=sortPower;$("levelBadge").textContent="DAY 1 • "+(["NORMAL","BUSY","RUSH","CRISIS"][Math.min(3,level-1)]);
+ $("combo").textContent="COMBO ×"+mult;$("combo").classList.toggle("show",streak>=3);
+ $("a1").classList.toggle("on",saved>=1);$("a2").classList.toggle("on",mult>=5);$("a3").classList.toggle("on",co2>=10);$("a4").classList.toggle("on",saved>=18);
+ [["capacity","u1"],["combo","u2"],["time","u3"],["eco","u4"]].forEach(([x,id])=>{const b=$(id);if(upgrade[x]){b.classList.add("locked");b.textContent="✓ "+x+" upgraded";}});
+}
+function endGame(success=false){
+ if(!running)return;running=false;stopAmbience();sfx(success?"win":"lose");clearInterval(timer);clearInterval(spawnTimer);document.querySelectorAll(".item").forEach(e=>e.remove());
+ const accuracy=attempts?Math.round(saved/attempts*100):0;$("finalScore").textContent=score;$("rSaved").textContent=saved;$("rCo2").textContent=co2.toFixed(1);$("rAccuracy").textContent=accuracy+"%";
+ $("endTitle").textContent=success?"District quota achieved!":"Shift complete";
+ $("endText").innerHTML=(success?"You kept the recovery network supplied through the rush.":"The shift ended before the rescue quota was secured.")+"<br><br><b>Performance:</b> "+accuracy+"% decision accuracy • reputation "+rep+"/100.<br><br><b>Reflection:</b> what upstream change could prevent this waste from appearing in the first place?";
+ $("overlay").classList.add("show");update();
+}
+update();
+</script>
+</body></html>
